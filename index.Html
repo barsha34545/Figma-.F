@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bundle & Save</title>
+    <style>
+        :root {
+            --primary-pink: #ff4081;
+            --light-pink: #ffebee;
+            --border-color: #ddd;
+            --text-color: #333;
+            --dark-gray: #666;
+            --price-color: #000;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+        
+        .bogo-header {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-pink);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary-pink);
+        }
+
+        .option-item.selected {
+            border: 2px solid var(--primary-pink);
+            background-color: var(--light-pink);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-item.selected .option-header .new-price {
+            color: var(--primary-pink);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .radio-input {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--dark-gray);
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            outline: none;
+            margin-right: 10px;
+        }
+
+        .radio-input:checked {
+            border-color: var(--primary-pink);
+        }
+
+        .radio-input:checked::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-pink);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex-grow: 1;
+        }
+        
+        .option-label span:first-child {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--price-color);
+        }
+        
+        .option-label span:last-child {
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+        }
+
+        .option-price {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+
+        .option-price .new-price {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .option-price .old-price {
+            text-decoration: line-through;
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+            margin-left: 5px;
+        }
+
+        .discount-badge {
+            background-color: var(--primary-pink);
+            color: white;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .most-popular-label {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--primary-pink);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .option-details {
+            max-height: 0;
+            overflow: hidden;
+            padding-top: 0;
+            border-top: 1px solid transparent; 
+            margin-top: 0;
+            transition: max-height 0.3s ease-in-out, padding-top 0.3s ease-in-out, margin-top 0.3s ease-in-out, border-color 0.3s ease-in-out;
+        }
+        
+        .selected .option-details {
+            max-height: 500px; 
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 15px;
+        }
+
+        .details-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .details-label {
+            width: 60px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-right: 15px;
+        }
+        
+        .details-inputs {
+            display: flex;
+            flex-grow: 1;
+            gap: 10px;
+        }
+
+        .details-inputs select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: white;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .shipping-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-top: 20px;
+        }
+
+        .total-price {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        
+        .add-to-cart-btn {
+            width: 100%;
+            background-color: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #c51162;
+        }
+
+        .powered-by {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+        }
+
+        @media (max-width: 480px) {
+            .option-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .option-label {
+                margin-bottom: 10px;
+            }
+
+            .option-price {
+                align-items: flex-start;
+            }
+        }
+        
+        .option-price .old-price-line {
+            text-decoration: line-through;
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="bogo-header">YAY! IT'S BOGO</h2>
+        <ul class="options-list">
+            <li class="option-item" data-price="10.00" data-discount="50">
+                <div class="option-header">
+                    <label class="option-label">
+                        <input type="radio" name="bundle-option" class="radio-input">
+                        <span>1 Unit</span>
+                        <span>Standard Price</span>
+                    </label>
+                    <div class="option-price">
+                        <span class="new-price">$10.00 USD</span>
+                        <span class="old-price"></span>
+                        <span class="discount-badge">50% OFF</span>
+                    </div>
+                </div>
+                <div class="option-details"></div>
+            </li>
+            <li class="option-item selected" data-price="18.00" data-pairs="2">
+                <div class="most-popular-label">Most Popular</div>
+                <div class="option-header">
+                    <label class="option-label">
+                        <input type="radio" name="bundle-option" class="radio-input" checked>
+                        <span>2 Unit</span>
+                    </label>
+                    <div class="option-price">
+                        <span class="new-price">$18.00 USD</span>
+                        <span class="old-price-line">$24.00 USD</span>
+                    </div>
+                </div>
+                <div class="option-details">
+                    <!-- Details will be added dynamically by JS -->
+                </div>
+            </li>
+            <li class="option-item" data-price="24.00" data-discount="60">
+                <div class="option-header">
+                    <label class="option-label">
+                        <input type="radio" name="bundle-option" class="radio-input">
+                        <span>3 Unit</span>
+                    </label>
+                    <div class="option-price">
+                        <span class="new-price">$24.00 USD</span>
+                        <span class="old-price"></span>
+                        <span class="discount-badge">60% OFF</span>
+                    </div>
+                </div>
+                <div class="option-details"></div>
+            </li>
+        </ul>
+        <div class="shipping-info">
+            <span>FREE Delivery</span>
+            <span>Total: <span class="total-price">$18.00 USD</span></span>
+        </div>
+        <button class="add-to-cart-btn">+ Add to Cart</button>
+        <p class="powered-by">Powered by Pumper</p>
+    </div>
+  
+    <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const options = document.querySelectorAll('.option-item');
+            const totalElement = document.querySelector('.total-price');
+           
+            // This Function to dynamically create the detail rows
+            const createDetails = (item) => {
+                const pairs = parseInt(item.dataset.pairs, 10);
+                const detailsContainer = item.querySelector('.option-details');
+                detailsContainer.innerHTML = '';
+                if (pairs > 1) {
+                    for (let i = 1; i <= pairs; i++) {
+                        const row = document.createElement('div');
+                        row.classList.add('details-row');
+                        row.innerHTML = `
+                            <span class="details-label">#${i}</span>
+                            <div class="details-inputs">
+                                <select>
+                                    <option value="s">S</option>
+                                    <option value="m">M</option>
+                                    <option value="l">L</option>
+                                </select>
+                                <select>
+                                    <option value="colour">Colour</option>
+                                    <option value="black">Black</option>
+                                    <option value="white">White</option>
+                                    <option value="blue">Blue</option>
+                                </select>
+                            </div>
+                        `; 
+                        detailsContainer.appendChild(row);
+                    }
+                }
+            };
+
+            // Function to handle option selection
+            const handleSelect = (selectedItem) => {
+                options.forEach(item => {
+                    item.classList.remove('selected');
+                    item.querySelector('.radio-input').checked = false;
+                    item.querySelector('.option-details').innerHTML = '';
+                });
+             
+                // Add 'selected' class and check radio button for the clicked item
+                selectedItem.classList.add('selected');
+                selectedItem.querySelector('.radio-input').checked = true;
+
+                // Create details for the selected item
+                createDetails(selectedItem);
+
+                // Update total price based on selected item's price
+                const price = parseFloat(selectedItem.dataset.price);
+                if (!isNaN(price)) {
+                    totalElement.textContent = `$${price.toFixed(2)} USD`;
+                }
+            };
+            
+            // Add click event listeners to each option item
+            options.forEach(item => {
+                item.addEventListener('click', (event) => {
+                    // Prevent radio button click from triggering the same event twice
+                    if (event.target.type !== 'radio') {
+                        handleSelect(item);
+                    }
+                });
+            });
+
+            // Initial setup to handle the pre-selected "Most Popular" option
+            const popularOption = document.querySelector('.option-item.selected');
+            if (popularOption) {
+                handleSelect(popularOption);
+              
+            }
+        });
+    </script>
+</body>
+</html>
