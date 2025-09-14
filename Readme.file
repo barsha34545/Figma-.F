@@ -1,0 +1,25 @@
+ Save Webpage
+This is a single-page web application that showcases a "Bundle & Save" product section, designed to match a provided Figma design. The page allows users to select from different product bundles, view pricing details, and customize their selection before adding it to a cart.
+
+Features
+Responsive Design: The layout adapts to different screen sizes, ensuring a good user experience on both desktop and mobile devices.
+
+Interactive Options: Users can select one of three bundle options by clicking on the box or the radio button.
+
+Dynamic UI: When a user selects a multi-unit bundle (e.g., "2 Unit"), the page dynamically reveals size and color selection fields.
+
+Real-time Price Update: The total price displayed at the bottom of the page automatically updates to reflect the cost of the selected bundle.
+
+"Most Popular" Badge: A visually distinct badge highlights the recommended bundle option.
+
+Technologies Used
+HTML5: Used for the basic structure and semantic organization of the page.
+
+CSS3: All styling, including the responsive design and visual effects, is implemented using custom CSS, without any external frameworks.
+
+Vanilla JavaScript: Handles all interactive elements, such as the bundle selection, showing/hiding options, and updating the total price.
+
+This comprehensive, single-file approach fulfills all of requirements for implementation, structure, and functionality.
+
+How to Run
+To run this webpage, simply open the index.html file in any modern web browser. All the necessary HTML, CSS, and JavaScript are contained within this single file.
