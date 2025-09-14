@@ -1,2 +1,2 @@
-# Figma-.F
+# Figma.F
 This is my  Project
